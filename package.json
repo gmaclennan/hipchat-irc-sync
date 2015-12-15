@@ -1,0 +1,31 @@
+{
+  "name": "hipchat-irc-sync",
+  "version": "1.0.0",
+  "description": "Synchronize a Hipchat room and an IRC channel",
+  "main": "web.js",
+  "scripts": {
+    "start": "node server.js",
+    "start-dev": "env $(cat .env | xargs) node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hipchat",
+    "irc",
+    "sync"
+  ],
+  "author": "Gregor MacLennan / Digital Democracy",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "express": "^4.13.3",
+    "express-jwt": "^3.3.0",
+    "heroku-self-ping": "git+https://github.com/gmaclennan/heroku-self-ping",
+    "hipchatter": "^0.2.0",
+    "irc": "^0.4.0",
+    "lodash": "^3.10.1",
+    "markdown-it": "^5.0.2",
+    "morgan": "^1.6.1",
+    "object-assign": "^4.0.1"
+  },
+  "devDependencies": {}
+}
