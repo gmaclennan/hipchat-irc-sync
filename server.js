@@ -2,7 +2,6 @@ var express = require('express')
 var bodyParser = require('body-parser')
 var morgan = require('morgan')
 var Hipchatter = require('hipchatter')
-var url = require('url')
 var _ = require('lodash')
 var herokuSelfPing = require('heroku-self-ping')
 
@@ -36,21 +35,6 @@ function createWebhooks (roomId) {
       }, function (err, hook) {
         if (err) return console.error(err)
         console.log('created webhook for %s:%s', roomId, event)
-      })
-    })
-  })
-}
-
-function deleteWebhooks (roomId) {
-  hipchatter.webhooks(roomId, function (err, hooks) {
-    if (err) return console.error(err)
-    hooks.items.filter(function (webhook) {
-      var hostname = url.parse(webhook.url).host
-      return (hostname === HOSTNAME)
-    }).forEach(function (webhook) {
-      hipchatter.delete_webhook(roomId, webhook.id, function (err) {
-        if (err) return console.error(err)
-        console.log('deleted webhook for %s:%s', roomId, webhook.url)
       })
     })
   })
@@ -107,15 +91,6 @@ app.post('/room_exit', function (req, res) {
 app.post('/room_message', function (req, res) {
   var message = req.body.item.message.message
   irc.say(req.username, req.channel, message)
-  res.status(200).end()
-})
-
-app.get('/' + HIPCHAT_TOKEN + '/delete_webhooks', function (req, res) {
-  irc.getIrcRooms(function (rooms) {
-    for (var channel in rooms) {
-      deleteWebhooks(rooms[channel])
-    }
-  })
   res.status(200).end()
 })
 

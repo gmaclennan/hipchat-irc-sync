@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "start-dev": "env $(cat .env | xargs) node server.js",
+    "delete-webhooks": "env $(cat .env | xargs) node scripts/delete-webhooks.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
