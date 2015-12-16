@@ -10,6 +10,7 @@ var app = express()
 
 var HIPCHAT_TOKEN = process.env.HIPCHAT_TOKEN
 var HOSTNAME = process.env.HOSTNAME
+var WEBHOOK_PREFIX = '/' + process.env.SECRET
 
 var hipchatter = new Hipchatter(HIPCHAT_TOKEN)
 
@@ -27,9 +28,9 @@ function createWebhooks (roomId) {
     if (err) return console.error(err)
     var events = ['room_message', 'room_enter', 'room_exit']
     events.forEach(function (event) {
-      if (_.find(hooks.items, 'url', 'https://' + HOSTNAME + '/' + event)) return
+      if (_.find(hooks.items, 'url', 'https://' + HOSTNAME + WEBHOOK_PREFIX + '/' + event)) return
       hipchatter.create_webhook(roomId, {
-        url: 'https://' + HOSTNAME + '/' + event,
+        url: 'https://' + HOSTNAME + WEBHOOK_PREFIX + '/' + event,
         event: event,
         authentication: 'jwt'
       }, function (err, hook) {
@@ -78,17 +79,17 @@ app.get('/', function (req, res) {
   res.send('hipchat irc sync').end()
 })
 
-app.post('/room_enter', function (req, res) {
+app.post(WEBHOOK_PREFIX + '/room_enter', function (req, res) {
   irc.joinChannel(req.username, req.channel)
   res.status(200).end()
 })
 
-app.post('/room_exit', function (req, res) {
+app.post(WEBHOOK_PREFIX + '/room_exit', function (req, res) {
   irc.partChannel(req.username, req.channel)
   res.status(200).end()
 })
 
-app.post('/room_message', function (req, res) {
+app.post(WEBHOOK_PREFIX + '/room_message', function (req, res) {
   var message = req.body.item.message.message
   irc.say(req.username, req.channel, message)
   res.status(200).end()
