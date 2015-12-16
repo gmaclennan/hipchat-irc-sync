@@ -59,7 +59,7 @@ getIrcRooms(function (err, rooms) {
         if (message.user === '~nodebot') return
         hipchatter.notify(ircRooms[to], {
           message: md.render('**' + from + ':** ' + text),
-          notify: true
+          notify: false
         }, onErr)
       })
     } else {
