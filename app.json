@@ -1,0 +1,44 @@
+{
+  "name": "Hipchat IRC Sync",
+  "description": "Synchronize Hipchat rooms with irc.freenode.com channels",
+  "keywords": [
+    "irc",
+    "hipchat"
+  ],
+  "repository": "https://github.com/gmaclennan/hipchat-irc-sync",
+  "env": {
+    "HIPCHAT_TOKEN": {
+        "description": "Hipchat API key from https://www.hipchat.com/account/api with scopes: Administer Room, Send Message, Send Notification, View Room"
+    },
+    "HOSTNAME": {
+        "description": "Hostname of this app with no protocol or trailing slash e.g. my_app.herokuapp.com"
+    },
+    "SECRET": {
+        "description": "Used to keep webhook endpoints secret",
+        "generator": "secret"
+    },
+    "USER_MAPPINGS": {
+        "description": "Comma-separated list of user mappings myHipchatMentionName:myIrcNickname:ircNickservePassword - by default Hipchat @mention names will be used as IRC names with POSTFIX appended. Password is optional - if given will register ident with Nickserv",
+        "required": false
+    },
+    "PM_USERS": {
+        "description": "Comma-separated list of Hipchat @mention names (without '@') that will receive PM notifications for IRC /query",
+        "required": false
+    },
+    "SYNC_USER": {
+        "description": "Sync user and mapping to Hipchat user syncHipchatUserMentionName:syncIrcNickname:ircNickservePassword Default is ircbot:hipchat-bot",
+        "required": false,
+        "value": "ircbot:hipchat-bot"
+    },
+    "USER_POSTFIX": {
+        "description": "Appended to Hipchat @mention names to create irc names. Default is -hipchat",
+        "required": false,
+        "value": "-hipchat"
+    },
+    "TZ": {
+        "description": "Timezone for server keepalive",
+        "value": "America/Los_Angeles",
+        "required": false
+    }
+  }
+}

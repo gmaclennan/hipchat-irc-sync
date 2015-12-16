@@ -10,7 +10,7 @@ var md = require('markdown-it')({
 var HIPCHAT_TOKEN = process.env.HIPCHAT_TOKEN
 var pmUsers = process.env.PM_USERS || ''
 var users = process.env.VALID_USERS || ''
-var syncUser = process.env.SYNC_USER || ':hipchat-bot'
+var syncUser = process.env.SYNC_USER || 'ircbot:hipchat-bot'
 var postfix = process.env.USER_POSTFIX || '-hipchat'
 
 var ircServer = 'irc.freenode.net'
@@ -80,7 +80,7 @@ function parseUser (userEnvVar) {
   return {
     mention_name: user[0],
     nickname: user[1],
-    password: user[3]
+    password: user.slice(2, user.length).join(':')
   }
 }
 
