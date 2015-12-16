@@ -9,7 +9,7 @@ var md = require('markdown-it')({
 
 var HIPCHAT_TOKEN = process.env.HIPCHAT_TOKEN
 var pmUsers = process.env.PM_USERS || ''
-var users = process.env.VALID_USERS || ''
+var users = process.env.USERS_MAPPINGS || ''
 var syncUser = process.env.SYNC_USER || 'ircbot:hipchat-bot'
 var postfix = process.env.USER_POSTFIX || '-hipchat'
 
@@ -22,9 +22,11 @@ var clients = {}
 var ircRooms
 var syncBot
 
-users = users.split(',').map(function (user) {
-  return parseUser(user)
-})
+users = users.split(',').reduce(function (prev, user) {
+  user = parseUser(user)
+  prev[user.mention_name] = user
+  return prev
+}, {})
 
 syncUser = parseUser(syncUser)
 pmUsers = pmUsers.split(',')
@@ -125,7 +127,7 @@ function createClient (user, cb) {
 }
 
 function joinChannel (username, channel) {
-  var user = _.find(users, 'mention_name', username)
+  var user = users[username] || parseUser(username)
   if (user) {
     createClient(user, function (err, client) {
       client.join(channel)
@@ -139,7 +141,7 @@ function partChannel (username, channel) {
 }
 
 function say (username, channel, message) {
-  var user = _.find(users, 'mention_name', username)
+  var user = users[username] || parseUser(username)
   if (user) {
     createClient(user, function (err, client) {
       client.say(channel, message)
